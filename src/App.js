@@ -1,5 +1,5 @@
 import logo from './logo.svg';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import './App.css';
 
 import { initializeApp } from 'firebase/app';
@@ -60,6 +60,7 @@ function SignOut() {
 function ChatRoom() {
 
   const [ user ] = useAuthState(auth);
+  const dummy = useRef()
 
   const messagesRef = collection(firestore, 'messages');
   const messageQuery = query(messagesRef, orderBy('createdAt'), limit(25))
@@ -82,13 +83,17 @@ function ChatRoom() {
     })
 
     setFormValue('');
+
+    dummy.current.scrollIntoView({
+      behavior: 'smooth'
+    });
   }
 
   return (<>
       <main>
-
-        <div>
           {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+        <div ref={dummy}>
+
         </div>
 
       </main>
